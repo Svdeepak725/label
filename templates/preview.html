@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Label Preview - AI Wedding Bottle Label Generator</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <!-- Load template fonts used by themes -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:wght@400;700&family=Montserrat:wght@400;700&family=Poppins:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    {% set preview_font = 'Cinzel' if data.theme == 'Royal' else ('Playfair Display' if data.theme == 'Traditional' else ('Montserrat' if data.theme == 'Modern' else 'Poppins')) %}
+    <style>
+        :root { --preview-font: "{{ preview_font }}", Inter, sans-serif; }
+        .detail-card p { font-family: var(--preview-font); }
+        .detail-card .detail-label { font-family: Inter, sans-serif; }
+    </style>
+</head>
+<body>
+    <div class="page-shell preview-shell">
+        <section class="preview-header">
+            <div>
+                <p class="eyebrow">Label Preview</p>
+                <h1>Your wedding bottle label is ready</h1>
+                <p class="hero-text">Download your print-ready PNG or PDF sized for a 500ml bottle (210×75 mm).</p>
+            </div>
+            <a href="/" class="secondary-button">Create Another Label</a>
+        </section>
+
+        <section class="preview-content">
+            <div class="preview-panel">
+                <div class="card white-card">
+                    <div id="labelPreviewCard" class="label-preview-card">
+                        <!-- Server-generated label image (1200x600) -->
+                        <div class="label-image-wrap">
+                            <img id="label-image-preview" src="{{ label_src }}" alt="Label preview" />
+                        </div>
+                    </div>
+
+                    <div class="download-actions">
+                            <button id="downloadPng" type="button" class="primary-button" onclick="downloadPNG()">Download PNG</button>
+                            <button id="downloadPdf" type="button" class="secondary-button" onclick="downloadPDF()">Download PDF</button>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="preview-details">
+                <div class="detail-card">
+                    <p class="detail-label">Groom</p>
+                    <p>{{ data.groom }}</p>
+                </div>
+                <div class="detail-card">
+                    <p class="detail-label">Bride</p>
+                    <p>{{ data.bride }}</p>
+                </div>
+                <div class="detail-card">
+                    <p class="detail-label">Wedding Date</p>
+                    <p>{{ data.date }}</p>
+                </div>
+                <div class="detail-card">
+                    <p class="detail-label">Religion</p>
+                    <p>{{ data.religion }}</p>
+                </div>
+                <div class="detail-card">
+                    <p class="detail-label">Theme</p>
+                    <p>{{ data.theme }}</p>
+                </div>
+            </aside>
+        </section>
+
+        <div id="previewSuccess" class="toast-message success hidden">
+            <p>Your design is ready. Use the buttons above to download the label.</p>
+        </div>
+    </div>
+
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loader"></div>
+        <p>Preparing your download...</p>
+    </div>
+
+    <script type="application/json" id="preview-data">{{ preview_data_json | safe }}</script>
+    <script>
+        window.previewData = JSON.parse(document.getElementById('preview-data').textContent);
+    </script>
+    <script src="/static/js/script.js"></script>
+</body>
+</html>
